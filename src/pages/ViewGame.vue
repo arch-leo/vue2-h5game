@@ -150,7 +150,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /*page-game*/
-.page-game{height: 100%;padding: .76rem 0 1rem;}
+.page-game{height: 100%;padding: .76rem 0 .8rem;}
 .game-nav{overflow: hidden;position: relative;width: 100%;height: .76rem;line-height: .72rem;text-align: center;margin-top: -.76rem;}
 .game-cont{height: 100%;}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="page-view page-user">
     <div class="user-head">
-      <img src="../assets/headpic.jpg" alt="h5游戏">
+      <img :src="userInfo && userInfo.avatar ? userInfo.avatar : '//p3.ifengimg.com/8369833f2e281cb1/2018/31/headpic.jpg'" alt="h5游戏">
       <h3>
         <span class="ellipsis">{{userInfo && userInfo.username ? userInfo.username : '请先登录'}}</span>
       </h3>
@@ -107,7 +107,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /*page-user*/
-.page-user{padding-bottom: 1rem;background: #fff;min-height: 100%;}
+.page-user{padding-bottom: .8rem;background: #fff;min-height: 100%;}
 /*user-head*/
 .user-head{border-bottom: .1rem solid #f2f2f2;padding: .4rem .2rem;display: flex;}
 .user-head img{width: 1rem;height: 1rem;border-radius: 50%;}

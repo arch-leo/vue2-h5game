@@ -24,9 +24,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.foot{height: 1rem;padding-top: .1rem;background: #f2f2f2;border-top: 1px solid #bfbfbf;}
-.foot a{float: left;text-align: center;}
-.foot a i{display: block;width: .48rem;height: .4rem;background: url(../assets/images/nav-icon.png) no-repeat 0 0;background-size: 1.44rem;margin: 0 auto .06rem;}
+.foot{height: .8rem;padding-top: .02rem;background: #f2f2f2;border-top: 1px solid #bfbfbf;}
+.foot a{float: left;text-align: center;color: #999;}
+.foot a i{display: block;width: .48rem;height: .4rem;background: url(../assets/images/nav-icon.png) no-repeat 0 0;background-size: 1.44rem;margin: 0 auto;}
 .foot a:nth-child(1){width: 33.3%;}
 .foot a:nth-child(2){width: 33.4%;}
 .foot a:nth-child(3){width: 33.3%;}

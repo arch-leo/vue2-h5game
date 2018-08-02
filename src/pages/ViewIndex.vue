@@ -221,10 +221,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /*page-index*/
-.page-index{height: 100%;padding-bottom: 1rem;}
+.page-index{height: 100%;padding-bottom: .8rem;}
 /*focus*/
 .focus{overflow: hidden;position: relative;border-bottom: .1rem solid #f2f2f2;}
-.focus-fill{height: 0;padding-bottom: 50%;width: 100%;display: block;}
+.focus-fill{height: 0;padding-bottom: 40%;width: 100%;display: block;}
 .focus-cont{height: 100%;width: 100%;position: absolute;left: 0;top: 0;}
 .focus-cont img{display: block;}
 /*recent*/
