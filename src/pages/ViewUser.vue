@@ -36,7 +36,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo', 'isWeixin'])
+    ...mapState(['userInfo', 'isWeixin', 'isApp'])
   },
   created () {
     const userSid = getCookie('sid')
@@ -75,8 +75,12 @@ export default {
         }
         this.$router.push({path: path})
       } else {
-        this.setUserInfo(null)
-        this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        if (this.isApp) {
+          window.open('//sy.ifeng.com/member/member/login')
+        } else {
+          this.setUserInfo(null)
+          this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        }
       }
     },
     logreg () {

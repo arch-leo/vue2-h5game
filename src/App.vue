@@ -42,7 +42,7 @@ import {mapState, mapMutations} from 'vuex'
 
 import Foot from '@/components/Foot'
 import Logreg from '@/pages/ViewLogreg'
-import {getCookie} from '@/utils/storage'
+import {getCookie, getItem, setItem} from '@/utils/storage'
 import {isWeiXin} from '@/utils/isweixin'
 import {apiGetBind} from '@/config/api'
 
@@ -98,6 +98,15 @@ export default {
     }
   },
   created () {
+    // 检测是否为app
+    if (getItem('isapp') === 'gapp') {
+      this.setApp(true)
+    } else {
+      if (this.$route.query.src === 'gapp') {
+        this.setApp(true)
+        setItem('isapp', 'gapp')
+      }
+    }
     // 检测是否为微信
     const isweixin = isWeiXin()
     this.setWeixin(isweixin)
@@ -120,7 +129,7 @@ export default {
     Logreg
   },
   methods: {
-    ...mapMutations(['setUserInfo', 'popLoadFn', 'popInfoFn', 'popFirmFn', 'goTopFn', 'setWeixin']),
+    ...mapMutations(['setUserInfo', 'popLoadFn', 'popInfoFn', 'popFirmFn', 'goTopFn', 'setWeixin', 'setApp']),
     popCanceil () {
       this.popFirmFn(null)
     },
@@ -183,13 +192,15 @@ body{color:#1a1a1a;font-weight:400;font-size:0.24rem;line-height:1.6;height:100%
 #app .maxwidth{position:fixed;bottom:0;width:100%;z-index:10;}
 #app .goback{position:fixed;top:0;width:100%;}
 @media screen and (min-width:750px) {
-  #app{max-width:5.4rem;}
-  #app .maxwidth{max-width:5.4rem;}
-  #app .parent-view{max-width:5.4rem;}
-  #app .child-view{max-width:5.4rem;}
-  #app .page-view{max-width:5.4rem;}
-  #app .goback{max-width:5.4rem;}
-  #app .pop-mask{max-width:5.4rem;}
+  #app{max-width:540px;}
+  #app .maxwidth{max-width:540px;}
+  #app .parent-view{max-width:540px;}
+  #app .child-view{max-width:540px;}
+  #app .page-view{max-width:540px;}
+  #app .goback{max-width:540px;}
+  #app .pop-mask{max-width:540px;}
+  ::-webkit-scrollbar {width: 6px;}
+  ::-webkit-scrollbar-thumb{background-color:#ccc; border-radius:3px;}
 }
 .gotop{position: fixed;bottom: 1.18rem;right: .18rem;width: .64rem;height: .64rem;padding-top: .22rem;background: #fff;z-index: 12;}
 .gotop{box-shadow: 0 0 .1rem rgba(0, 0, 0, .5);border-radius: 50%;}
@@ -265,5 +276,4 @@ body{color:#1a1a1a;font-weight:400;font-size:0.24rem;line-height:1.6;height:100%
 .logreg-other h4{color: #999;margin-bottom: .3rem;}
 .logreg-other button{color: #999;}
 .logreg-other span{color: #f54343;}
-
 </style>

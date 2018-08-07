@@ -34,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo', 'isApp'])
   },
   methods: {
     ...mapMutations(['setUserInfo', 'popInfoFn', 'popFirmFn']),
@@ -43,8 +43,12 @@ export default {
       if (userSid) {
         this.getCard(id)
       } else {
-        this.setUserInfo(null)
-        this.popFirmFn('礼包需要登录后才能领取')
+        if (this.isApp) {
+          window.open('//sy.ifeng.com/member/member/login')
+        } else {
+          this.setUserInfo(null)
+          this.popFirmFn('礼包需要登录后才能领取')
+        }
       }
     },
     getCard (id) {

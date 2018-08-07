@@ -4,7 +4,7 @@
     <!-- 焦点图 -->
     <div class="focus">
       <span class="focus-fill"></span>
-      <Focus :focus="focus" v-if="focus.length > 0" class="focus-cont"></Focus>
+      <Focus :focus="focus" v-if="focus.length > 0" class="focus-cont" @launch="openUrl"></Focus>
     </div>
     <!-- 最近在玩 -->
     <div class="recent" v-if="recent.length > 0">
@@ -86,7 +86,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'isApp']),
     hotPost () {
       return {
         rank_id: 52,
@@ -180,8 +180,25 @@ export default {
       if (getCookie('sid')) {
         window.open('//sy.ifeng.com/service/download?game_id=' + param)
       } else {
-        this.setUserInfo(null)
-        this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        if (this.isApp) {
+          window.open('//sy.ifeng.com/member/member/login')
+        } else {
+          this.setUserInfo(null)
+          this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        }
+      }
+    },
+    openUrl (url) {
+      // param 游戏id
+      if (getCookie('sid')) {
+        window.open(url)
+      } else {
+        if (this.isApp) {
+          window.open('//sy.ifeng.com/member/member/login')
+        } else {
+          this.setUserInfo(null)
+          this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        }
       }
     },
     selectSubnav (index) {

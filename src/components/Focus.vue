@@ -1,9 +1,9 @@
 <template>
   <swiper :options="swiperOption">
     <swiper-slide :key="item.id" v-for="item in focus">
-      <a :href="item.url" target="_blank">
+      <span @click="jump(item.url)">
         <img :src="item.img_url" alt="h5游戏" width="100%">
-      </a>
+      </span>
     </swiper-slide>
     <div class="swiper-pagination" slot="pagination"></div>
     <!-- <div class="swiper-button-prev" slot="button-prev"></div> -->
@@ -41,8 +41,7 @@ export default {
   },
   methods: {
     jump (url) {
-      console.log(111)
-      this.$emit('launch-url', url)
+      this.$emit('launch', url)
     }
   }
 }

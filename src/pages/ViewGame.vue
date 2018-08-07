@@ -38,7 +38,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'isApp']),
     gamesPost () {
       return {
         category_id: this.category_id,
@@ -95,8 +95,12 @@ export default {
       if (getCookie('sid')) {
         window.open('//sy.ifeng.com/service/download?game_id=' + param)
       } else {
-        this.setUserInfo(null)
-        this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        if (this.isApp) {
+          window.open('//sy.ifeng.com/member/member/login')
+        } else {
+          this.setUserInfo(null)
+          this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        }
       }
     },
     getCalss () {

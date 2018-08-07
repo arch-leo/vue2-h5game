@@ -9,7 +9,8 @@ export default new Vuex.Store({
     popInfo: null,
     popFirm: null,
     goTop: false,
-    isWeixin: false
+    isWeixin: false,
+    isApp: null
   },
   getters: {
   },
@@ -24,7 +25,6 @@ export default new Vuex.Store({
     setUserProp (state, stat) {
       if (stat) {
         state.userInfo[stat['prop']] = stat['val']
-        console.log(state.userInfo)
       } else {
         state.userInfo = null
       }
@@ -46,6 +46,9 @@ export default new Vuex.Store({
     },
     setWeixin (state, stat) {
       state.isWeixin = stat
+    },
+    setApp (state, stat) {
+      state.isApp = stat
     }
   },
   actions: {
