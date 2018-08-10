@@ -1,0 +1,220 @@
+1.vue中引用图片问题
+
+    build下面 
+        找到utils.js中
+            ExtractTextPlugin.extract({
+                use: loaders,
+                fallback: 'vue-style-loader',
+                publicPath: '../../'        //追加此行
+            })
+    config下面
+        找到index.js中
+            assetsPublicPath: './',         //修改成 './'
+2.使用 
+    css 直接使用assets下面静态图片的相对路径
+    js  直接使用./static/img/文件.后缀       js中的引用都是直接引用打包发布后的地址  './static/img/...'
+
+3.焦点图
+    // 下载
+        npm install vue-awesome-swiper
+    // 配置 在App.vue同级main.js中增加
+        import VueAwesomeSwiper from 'vue-awesome-swiper'
+        // require styles
+        import 'swiper/dist/css/swiper.css'
+        Vue.use(VueAwesomeSwiper)
+    // 使用
+        <template>
+            <swiper :options="swiperOption" class="slider">
+                <swiper-slide :key="item.id" v-for="item in items">
+                    <router-link :to="item.url">
+                        <img :src="item.src" alt="swiper-image">
+                    </router-link>
+                </swiper-slide>  
+                <div class="swiper-pagination" slot="pagination"></div>
+                <!-- <div class="swiper-button-prev" slot="button-prev"></div> -->
+                <!-- <div class="swiper-button-next" slot="button-next"></div> -->
+            </swiper>  
+        </template>
+
+        <script>
+            export default {
+                name: 'notice',
+                data () {
+                    return {
+                    items: [
+                        { src: './static/img/1.jpg', url: '/my' },
+                        { src: './static/img/2.jpg', url: '/my' },
+                        { src: './static/img/3.jpg', url: '/my' }
+                    ],
+                    swiperOption: {
+                        // 初始化index
+                        initialSlide: 0,
+                        // 轮播方向 horizontal vertical
+                        direction: 'horizontal',
+                        autoplay: {
+                        // 触碰后是否停止轮播
+                        disableOnInteraction: false
+                        },
+                        loop: true,
+                        pagination: {
+                        // 分页器
+                        el: '.swiper-pagination',
+                        clickable: true
+                        }
+                    }
+                    }
+                }
+            }
+        </script>
+4.跨域 代理问题
+    在项目开发的时候，接口联调的时候一般都是同域名下，且不存在跨域的情况下进行接口联调，但是当我们现在使用vue-cli进行项目打包的时候，
+    我们在本地启动服务器后，比如本地开发服务下是 http://localhost:8080 这样的访问页面，但是我们的接口地址是 http://xxxx.com/save/index 这样的接口地址，
+    我们这样直接使用会存在跨域的请求，导致接口请求不成功，因此我们需要在打包的时候配置一下，我们进入 config/index.js 代码下如下配置即可：
+        dev: {
+
+        // 静态资源文件夹
+        assetsSubDirectory: 'static',
+
+        // 发布路径
+        assetsPublicPath: '/',
+
+        // 代理配置表，在这里可以配置特定的请求代理到对应的API接口
+        // 例如将'localhost:8080/api/xxx'代理到'www.example.com/api/xxx'
+        // 使用方法：https://vuejs-templates.github.io/webpack/proxy.html
+        proxyTable: {
+        '/api': {
+            target: 'http://xxxxxx.com', // 接口的域名
+            // secure: false,  // 如果是https接口，需要配置这个参数
+            changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+            pathRewrite: {
+            '^/api': ''
+            }
+        }
+        },
+
+        // 本地访问 http://localhost:8080
+        host: 'localhost', // can be overwritten by process.env.HOST
+
+    接口地址原本是 /save/index，但是为了匹配代理地址，在前面加一个 /api,  因此接口地址需要写成这样的即可生效 /api/save/index。
+    注意： '/api' 为匹配项，target 为被请求的地址，因为在 ajax 的 url 中加了前缀 '/api'，而原本的接口是没有这个前缀的，所以需要通过 pathRewrite 来重写地址，
+    将前缀 '/api' 转为 '/'。如果本身的接口地址就有 '/api' 这种通用前缀，就可以把 pathRewrite 删掉。
+
+5.如何使用less
+
+    npm install --save-dev less less-loader
+    找到webpack.base.conf.js,追加
+    {
+      test: /\.less$/,
+      loader: 'style-loader!css-loader!less-loader'
+    }
+    
+6.如何打包sprite 
+
+    npm install --save-dev webpack-spritesmith
+    找到webpack.dev.conf.js, 
+    const SpritesmithPlugin = require('webpack-spritesmith');
+    new SpritesmithPlugin({
+        src: {
+            cwd: path.resolve(__dirname, 'src/ico'),  //准备合并成sprit的图片存放文件夹
+            glob: '*.png'  //哪类图片
+        },
+        target: {
+            image: path.resolve(__dirname, 'src/assets/sprites.png'),  // sprite图片保存路径
+            css: path.resolve(__dirname, 'src/assets/_sprites.scss')  // 生成的sass保存在哪里
+        },
+        apiOptions: {
+            cssImageRef: "~sprite.png" //css根据该指引找到sprite图
+        }
+    })
+
+7.webview如何与vue交互？
+    一、交互比较简单 不需要返回值 
+        vue组件中  
+            js调用app 原理 webview可以拦截 src 请求 进而执行 someEvents
+                template -->   <iframe :src="src"></iframe>
+                js -->  methods --> openSth () {
+                            this.src = 'app://gapp.ifeng.com/open?param1=hello&param2=world'    //与app约定好的schema  xxx://xxx.xxx.com/xxx
+                        }
+            app调用js 原理 webview可以调用window对象的属性/方法  
+                js -->  created () {
+                            window.someMethod = this.someMethod     //将vue方法挂载到window对象上
+                        },
+                        methods: {
+                            someMethod () {
+                                //
+                            }
+                        }
+    二、交互比较复杂 需要返回值
+        使用 WebViewJavascriptBridge 详见github  https://github.com/marcuswestin/WebViewJavascriptBridge
+        需要前后端约定开发      开发实例博客  http://mengyujing.com/vue%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8WebViewJavascriptBridge/
+        原理 依然依赖 src 发送请求
+
+8.vue directives 自定义指令问题  input输入框的封装
+
+    el.focus()  F5或者Ctrl + F5 不会自动聚焦 点击浏览器的左上角刷新才可以 ！！！
+    
+9.路由懒加载
+    像vue这种单页面应用，如果没有应用懒加载，运用webpack打包后的文件将会异常的大，造成进入首页时，需要加载的内容过多，时间过长，会出啊先长时间的白屏，
+    即使做了loading也是不利于用户体验，而运用懒加载则可以将页面进行划分，需要的时候加载页面，可以有效的分担首页所承担的加载压力，减少首页加载用时
+　　简单的说就是：进入首页不用一次加载过多资源造成用时过长！！！
+
+    正常写法
+        {
+            path: '/index',
+            name: 'index',
+            component: Index,
+            meta: { keepAlive: true }
+        },
+
+    懒加载写法
+        {
+            path: '/index',
+            name: 'index',
+            component: resolve => require(['@/components/index'], resolve),
+            meta: { keepAlive: true }
+        },
+
+
+10 mock数据
+    找到在webpack.dev.conf.js文件中
+        const express = require('express')
+        const app = express()
+        var appData = require('../data.json')
+        var seller = appData.seller
+        var goods = appData.goods
+        var ratings = appData.ratings
+        var apiRoutes = express.Router()
+        app.use('/api', apiRoutes)
+
+        //找到devServer,添加
+        before(app) {
+        app.get('/api/seller', (req, res) => {
+            res.json({
+            // 这里是你的json内容
+            errno: 0,
+            data: seller
+            })
+        }),
+        app.get('/api/goods', (req, res) => {
+            res.json({
+            // 这里是你的json内容
+            errno: 0,
+            data: goods
+            })
+        }),
+        app.get('/api/ratings', (req, res) => {
+            res.json({
+            // 这里是你的json内容
+            errno: 0,
+            data: ratings
+            })
+        })
+        }
+
+11.打包发布
+
+    npm run build --report 开启优化报告
+
+12.路由前进刷新 后退不刷新
+    http://www.mamicode.com/info-detail-2117247.html
+    https://blog.csdn.net/sinat_17775997/article/details/80950246
