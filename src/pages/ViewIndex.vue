@@ -1,39 +1,39 @@
 <template>
   <div class="page-view page-index">
     <MyScroll :pull-down="pullDown" :pull-up="pullUp" :get-scroll-top="getScrollTop" :can-refresh="false">
-    <!-- 焦点图 -->
-    <div class="focus">
-      <span class="focus-fill"></span>
-      <Focus :focus="focus" v-if="focus.length > 0" class="focus-cont" @launch="openUrl"></Focus>
-    </div>
-    <!-- 最近在玩 -->
-    <div class="recent" v-if="recent.length > 0">
-      <div class="recent-title">
-        <span>最</span>
-        <span>近</span>
-        <span>在</span>
-        <span>玩</span>
+      <!-- 焦点图 -->
+      <div class="focus">
+        <span class="focus-fill"></span>
+        <Focus :focus="focus" v-if="focus.length > 0" class="focus-cont" @launch="openUrl"></Focus>
       </div>
-      <Slider :slider="recent" @launch="openGame"></Slider>
-    </div>
-    <!-- 热门 活动 礼包 （次级导航） -->
-    <ul class="clearfix subnav">
-      <li :key="item.id" v-for="(item, index) in subnavs" :class="item.active ? 'active' : ''" @click="selectSubnav(index)">{{item.title}}</li>
-    </ul>
-    <!-- cont -->
-    <div class="main">
-      <template v-if="subflag === 'hot'">
-        <Gamelist :game-list="hotList" @open-game="openGame"></Gamelist>
-      </template>
-      <template v-else-if="subflag === 'act'">
-        <Actlist :act-list="actList"></Actlist>
-      </template>
-      <template v-else-if="subflag === 'gift'">
-        <Giftlist :gift-list="giftList"></Giftlist>
-      </template>
-      <template v-else>
-      </template>
-    </div>
+      <!-- 最近在玩 -->
+      <div class="recent" v-if="recent.length > 0">
+        <div class="recent-title">
+          <span>最</span>
+          <span>近</span>
+          <span>在</span>
+          <span>玩</span>
+        </div>
+        <Slider :slider="recent" @launch="openGame"></Slider>
+      </div>
+      <!-- 热门 活动 礼包 （次级导航） -->
+      <ul class="clearfix subnav">
+        <li :key="item.id" v-for="(item, index) in subnavs" :class="item.active ? 'active' : ''" @click="selectSubnav(index)">{{item.title}}</li>
+      </ul>
+      <!-- cont -->
+      <div class="main">
+        <template v-if="subflag === 'hot'">
+          <Gamelist :game-list="hotList" @open-game="openGame"></Gamelist>
+        </template>
+        <template v-else-if="subflag === 'act'">
+          <Actlist :act-list="actList"></Actlist>
+        </template>
+        <template v-else-if="subflag === 'gift'">
+          <Giftlist :gift-list="giftList"></Giftlist>
+        </template>
+        <template v-else>
+        </template>
+      </div>
     </MyScroll>
   </div>
 </template>
@@ -46,8 +46,9 @@ import Slider from '@/components/Slider'
 import Gamelist from '@/components/Gamelist'
 import Actlist from '@/components/Actlist'
 import Giftlist from '@/components/Giftlist'
-import {apiGetRecords, apiGetHot, apiGetAct, apiGetGift} from '@/config/api'
+import {apiGetRecords, apiGetHot, apiGetAct, apiGetGift, urlLogin, urlOpen} from '@/config/api'
 import {getCookie} from '@/utils/storage'
+
 const apiObj = {
   hot: apiGetHot,
   act: apiGetAct,
@@ -178,10 +179,10 @@ export default {
     openGame (param) {
       // param 游戏id
       if (getCookie('sid')) {
-        window.open('//sy.ifeng.com/service/download?game_id=' + param)
+        window.open(urlOpen + param)
       } else {
         if (this.isApp) {
-          window.open('//sy.ifeng.com/member/member/login')
+          window.open(urlLogin)
         } else {
           this.setUserInfo(null)
           this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
@@ -194,7 +195,7 @@ export default {
         window.open(url)
       } else {
         if (this.isApp) {
-          window.open('//sy.ifeng.com/member/member/login')
+          window.open(urlLogin)
         } else {
           this.setUserInfo(null)
           this.$router.push({path: this.$route.fullPath, query: {logreg: true}})

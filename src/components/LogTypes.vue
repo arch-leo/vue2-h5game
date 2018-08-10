@@ -1,6 +1,6 @@
 <template>
   <div class="log-types" :class="{'has-border': hasBorder}">
-    <span class="logreg-weixin" @click="launch('weixin')" v-if="isWeixin"><em></em></span>
+    <span class="logreg-weixin" @click="launch('weixin')" v-if="isWeixin || isApp"><em></em></span>
     <span class="logreg-qq" @click="launch('qq')" v-if="!isWeixin"><em></em></span>
     <span class="logreg-mobile" @click="launch('phone')" v-if="!isWeixin"><em></em></span>
   </div>
@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isWeixin'])
+    ...mapState(['isWeixin', 'isApp'])
   },
   methods: {
     launch (name) {

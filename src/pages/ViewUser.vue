@@ -24,8 +24,9 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex'
-import {apiGetBind} from '@/config/api'
+import {apiGetBind, urlLogin} from '@/config/api'
 import {getCookie} from '@/utils/storage'
+
 export default {
   name: 'ViewGame',
   data () {
@@ -76,7 +77,7 @@ export default {
         this.$router.push({path: path})
       } else {
         if (this.isApp) {
-          window.open('//sy.ifeng.com/member/member/login')
+          window.open(urlLogin)
         } else {
           this.setUserInfo(null)
           this.$router.push({path: this.$route.fullPath, query: {logreg: true}})

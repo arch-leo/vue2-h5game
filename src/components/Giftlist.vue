@@ -24,8 +24,7 @@
 import {mapState, mapMutations} from 'vuex'
 import {delHtmlTag} from '@/utils/delHtmlTag'
 import {getCookie} from '@/utils/storage'
-import {apiGetCard} from '@/config/api'
-
+import {apiGetCard, urlLogin} from '@/config/api'
 export default {
   name: 'Giftlist',
   props: ['gift-list'],
@@ -39,12 +38,11 @@ export default {
   methods: {
     ...mapMutations(['setUserInfo', 'popInfoFn', 'popFirmFn']),
     getGift (id) {
-      let userSid = getCookie('sid')
-      if (userSid) {
+      if (getCookie('sid')) {
         this.getCard(id)
       } else {
         if (this.isApp) {
-          window.open('//sy.ifeng.com/member/member/login')
+          window.open(urlLogin)
         } else {
           this.setUserInfo(null)
           this.popFirmFn('礼包需要登录后才能领取')

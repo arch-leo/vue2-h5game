@@ -27,3 +27,8 @@ export const apiRegMobile = (data) => axios.post(`${apiConfig}/regmobile`, qs.st
 export const apiSendRegMsg = (data) => axios.post(`${apiConfig}/sendregmsg`, qs.stringify(data)) // 注册 （账号）
 // 我的礼包
 export const apiGetMyCard = (data) => axios.post(`${apiConfig}/mycard`, qs.stringify(data)) // 获取我的礼包
+
+// app唤起登录 url
+export const urlLogin = '//sy.ifeng.com/member/login'
+// app唤起开始游戏
+export const urlOpen = '//sy.ifeng.com/service/download?game_id='

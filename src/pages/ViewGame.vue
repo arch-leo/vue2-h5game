@@ -18,8 +18,9 @@ import {mapState, mapMutations} from 'vuex'
 import MyScroll from '@/components/MyScroll'
 import Gamenav from '@/components/Gamenav'
 import Gamelist from '@/components/Gamelist'
-import {apiGetClass, apiGetGames} from '@/config/api'
+import {apiGetClass, apiGetGames, urlLogin, urlOpen} from '@/config/api'
 import {getCookie} from '@/utils/storage'
+
 const apiObj = {
   class: apiGetClass,
   games: apiGetGames
@@ -93,10 +94,10 @@ export default {
     openGame (param) {
       // param 游戏id
       if (getCookie('sid')) {
-        window.open('//sy.ifeng.com/service/download?game_id=' + param)
+        window.open(urlOpen + param)
       } else {
         if (this.isApp) {
-          window.open('//sy.ifeng.com/member/member/login')
+          window.open(urlLogin)
         } else {
           this.setUserInfo(null)
           this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
