@@ -88,7 +88,12 @@ export default {
       if (this.userInfo && this.userInfo.username) {
         location.href = 'https://sy.ifeng.com/service/logout?ref=' + encodeURIComponent('https://wan.ifeng.com/#/index')
       } else {
-        this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        if (this.isApp) {
+          window.open(urlLogin)
+        } else {
+          this.setUserInfo(null)
+          this.$router.push({path: this.$route.fullPath, query: {logreg: true}})
+        }
       }
     },
     getUserinfo () {
